@@ -1,0 +1,62 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/app/index.js",
+  "scripts": {
+    "test-1": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
+    "dev": "nodemon --legacy-watch --exec tsx src/app/index.ts",
+    "build": "rm -rf dist && npx tsup",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "start": "node ./dist/app/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaibhav-khanapure/job-hire-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/vaibhav-khanapure/job-hire-server/issues"
+  },
+  "homepage": "https://github.com/vaibhav-khanapure/job-hire-server#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "compression": "^1.8.2",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.7",
+    "drizzle-orm": "^1.0.0-rc.4",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "jose": "^6.2.12",
+    "morgan": "^1.12.1",
+    "pg": "^8.23.1",
+    "redis": "^6.3.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/bcrypt": "^6.0.0",
+    "@types/compression": "^1.8.1",
+    "@types/cors": "^2.8.19",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^26.6.5",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "^1.0.0-rc.4",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "nodemon": "^3.1.14",
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vitest": "^5.0.3"
+  }
+}

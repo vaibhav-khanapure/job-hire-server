@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "es2022",                   // Output latest JS features supported by Node 18+
+    "module": "nodenext",                 // Use Node.js ESM + CJS compatibility
+    "moduleResolution": "nodenext",       // Resolve imports like Node.js
+    "lib": ["esnext"],                    // Include latest JS built-ins
+    "types": ["node", "vitest/globals"],  // Include Node.js global types (process, Buffer, etc.)
+
+    "strict": true,                        // Enable all strict type checks
+    "noUncheckedIndexedAccess": true,      // Safer object/array access
+    "exactOptionalPropertyTypes": true,    // Optional properties are strictly optional
+    "noImplicitReturns": false,            // All code paths must return a value
+    "noImplicitOverride": true,            // Force `override` keyword on subclass methods
+    "noUnusedLocals": true,                // Warn about unused variables
+    "noUnusedParameters": true,            // Warn about unused function parameters
+    "noFallthroughCasesInSwitch": true,    // Prevent accidental fallthrough in switch
+    "noPropertyAccessFromIndexSignature": true, // Safer access via index signatures
+
+    "sourceMap": true,                     // Generate source maps for debugging
+    "declaration": false,                  // Generate .d.ts files for library usage
+    "declarationMap": false,               // Map .d.ts back to TS source
+
+    "isolatedModules": true,               // Each file can be compiled independently
+    "verbatimModuleSyntax": true,          // Keep imports/exports exactly as written
+    "noUncheckedSideEffectImports": true,  // Warn on side-effect-only imports
+    "moduleDetection": "force",            // Treat all files as modules
+    "skipLibCheck": true,                  // Skip type-checking node_modules for speed
+
+    "allowJs": true,                        // Allow JS files in project
+    "checkJs": false,                       // Don't type-check JS files (optional)
+  },
+  "include": ["src", "__tests__"],          // Include your source files
+  "exclude": ["node_modules", "dist"]       // Exclude tests & node_modules
+}
