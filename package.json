@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/vaibhav-khanapure/job-hire-server#readme",
   "dependencies": {
+    "axios": "^1.20.0",
     "bcrypt": "^6.0.0",
     "compression": "^1.8.2",
     "cors": "^2.8.6",
