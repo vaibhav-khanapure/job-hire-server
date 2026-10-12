@@ -3,11 +3,7 @@ import compression from 'compression';
 import morgan from 'morgan';
 
 import ENV from '../constants/ENV.js';
-
-import corsMiddleware from '../middlewares/corsMiddleware.js';
-import helmetMiddleware from '../middlewares/helmetMiddleware.js';
-import errorHandler from '../middlewares/errorHandler.js';
-import rateLimiter from '../middlewares/rateLimiter.js';
+import middlewares from '../middlewares/middlewares.js';
 
 const app = express();
 
@@ -27,16 +23,16 @@ app.set('trust proxy', true);
 // app.use(express.urlencoded({ extended: true, limit: "1mb", }));
 
 // CORS middleware
-app.use(corsMiddleware());
+app.use(middlewares.app.corsMiddleware());
 
 // Compression
 app.use(compression());
 
 // Helmet Middleware
-app.use(helmetMiddleware());
+app.use(middlewares.app.helmetMiddleware());
 
 // Rate limit
-app.use(rateLimiter());
+app.use(middlewares.app.rateLimiter());
 
 // Add logging
 if (ENV.IS_DEV) app.use(morgan("tiny"));
@@ -45,6 +41,6 @@ if (ENV.IS_DEV) app.use(morgan("tiny"));
 app.all("/*path", (_, res) => res.status(404).json({ message: "Invalid route" }));
 
 // Error Handler
-app.use(errorHandler);
+app.use(middlewares.app.errorHandler());
 
 export default app;

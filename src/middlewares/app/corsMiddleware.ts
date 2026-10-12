@@ -1,5 +1,5 @@
 import cors from 'cors';
-import ENV from '../constants/ENV.js';
+import ENV from '../../constants/ENV.js';
 
 const corsMiddleware = () => {
     return cors({

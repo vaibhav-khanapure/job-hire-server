@@ -1,4 +1,3 @@
-
 import type { Server } from 'node:http';
 
 import redis from '../config/redis.js';
