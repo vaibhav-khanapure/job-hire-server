@@ -1,3 +1,4 @@
+// App middlewares
 import corsMiddleware from './app/corsMiddleware.js';
 import errorHandler from './app/errorHandler.js';
 import helmetMiddleware from './app/helmetMiddleware.js';
@@ -9,6 +10,9 @@ const middlewares = {
         errorHandler,
         helmetMiddleware,
         rateLimiter
+    },
+    auth: {
+        
     }
 };
 
