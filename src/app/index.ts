@@ -25,7 +25,7 @@ const startServer = async () => {
             server.once('error', reject);
         });
 
-        console.log(`Server listening on port ${ENV.APP_PORT}`);
+        console.log(`Server listening on port`, ENV.APP_PORT);
 
         // Graceful shutdown signals
         process.on('SIGTERM', () => {

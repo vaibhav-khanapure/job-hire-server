@@ -20,12 +20,16 @@ const shutdownServer = async (server: Server, signal: string) => {
         // Stop accepting new HTTP connections.
         await new Promise<void>((resolve, reject) => {
             server.close((err) => {
-                if (err) return reject(err);
+                if (err) {
+                    reject(err);
+                    return;
+                };
+
                 resolve();
             });
 
             // Close idle keep-alive connections where supported.
-            server.closeIdleConnections?.();
+            server.closeIdleConnections();
         });
 
         // Close external resources.
