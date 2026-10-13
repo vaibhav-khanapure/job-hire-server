@@ -1,10 +1,10 @@
 import 'dotenv/config';
 
 import ENV from '../constants/ENV.js';
-import pg from '../config/pg.js';
 import redis from '../config/redis.js';
 import app from './app.js';
 import shutdownServer from '../lib/shutdownServer.js';
+import pg from '../config/pg/pg.js';
 
 const startServer = async () => {
     try {
@@ -12,9 +12,11 @@ const startServer = async () => {
         await redis.connect();
         console.log('Connected to Redis');
 
-        console.log('Checking PostgreSQL connection');
-        await pg.query('SELECT 1');
-        console.log('PostgreSQL connection successful');
+        console.log('Checking pool PostgreSQL connection');
+        await pg.pool.query('SELECT 1');
+        console.log('Pool PostgreSQL connection successful');
+
+        console.log()
 
         const server = app.listen(ENV.APP_PORT);
 
@@ -53,7 +55,7 @@ const startServer = async () => {
 
         await Promise.allSettled([
             redis.isOpen ? redis.quit() : Promise.resolve(),
-            pg.end(),
+            pg.pool.end(),
         ]);
 
         process.exit(1);

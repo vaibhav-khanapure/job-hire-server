@@ -1,7 +1,7 @@
 import type { Server } from 'node:http';
 
 import redis from '../config/redis.js';
-import pg from '../config/pg.js';
+import pg from '../config/pg/pg.js';
 
 let isShuttingDown = false;
 
@@ -31,7 +31,7 @@ const shutdownServer = async (server: Server, signal: string) => {
         // Close external resources.
         const results = await Promise.allSettled([
             redis.isOpen ? redis.quit() : Promise.resolve(),
-            pg.end(),
+            pg.pool.end(),
         ]);
 
         const failures = results.filter((result) => result.status === 'rejected');
@@ -49,7 +49,7 @@ const shutdownServer = async (server: Server, signal: string) => {
         clearTimeout(timeout);
         console.error('Shutdown failed:', err);
         process.exit(1);
-    }
+    };
 };
 
 export default shutdownServer;

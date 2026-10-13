@@ -10,7 +10,8 @@
     "build": "rm -rf dist && npx tsup",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "start": "node ./dist/app/index.js"
+    "start": "node ./dist/app/index.js",
+    "migrate": "npx tsx ./src/scripts/migrate.ts"
   },
   "repository": {
     "type": "git",
