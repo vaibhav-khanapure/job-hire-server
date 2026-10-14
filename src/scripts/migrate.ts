@@ -86,6 +86,7 @@ const migrate = async () => {
         throw error;
     } finally {
         client.release();
+        process.exit(0);
     };
 };
 
