@@ -1,16 +1,18 @@
 import type { NextFunction, Request, Response } from 'express';
 import { ZodError, type z } from 'zod';
 
-const schemaValidatorMiddleware = (schema: z.ZodType) => {
+const schemaValidatorMiddleware = (schema: z.ZodType, type: 'query' | 'body' | 'params' = 'body') => {
     return (req: Request, res: Response, next: NextFunction) => {
         try {
-            req.body = schema.parse(req.body ?? {});
+            const validatedData = schema.parse(req[type] ?? {});
+
+            Object.assign(req, { [type]: validatedData });
 
             next();
         } catch (error) {
             if (error instanceof ZodError) {
                 return res.status(400).json({
-                    message: error.issues[0]?.message ?? 'Validation failed'
+                    message: error?.issues?.[0]?.message ?? 'Validation failed'
                 });
             };
 

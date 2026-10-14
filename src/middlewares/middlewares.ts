@@ -5,7 +5,7 @@ import helmetMiddleware from './app/helmetMiddleware.js';
 import rateLimiter from './app/rateLimiter.js';
 
 // Validator Middlewares
-import schemaValidatorMiddleware from './validators/schemaValidator.js';
+import schemaValidatorMiddleware from './validators/schemaValidatorMiddleware.js';
 
 const middlewares = {
     app: {
