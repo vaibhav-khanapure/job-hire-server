@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS companies (
 
     name VARCHAR(500) NOT NULL,
     slug TEXT NOT NULL,
-    created_by INTEGER REFERENCES employers(id) ON DELETE SET NULL,
+    created_by INTEGER NOT NULL REFERENCES employers(id) ON DELETE SET NULL,
 
     logo_url TEXT,
     tagline VARCHAR(2000),
