@@ -1,7 +1,7 @@
 import authControllers from "./authControllers/authControllers.js";
 
 const controllers = {
-    authControllers,
+    auth: authControllers,
 };
 
 export default controllers;

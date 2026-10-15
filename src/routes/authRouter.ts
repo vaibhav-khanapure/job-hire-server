@@ -1,10 +1,20 @@
 import { Router } from 'express';
+import schemaValidator from '../middlewares/validators/schemaValidator.js';
+import controllers from '../controllers/controllers.js';
+import validationSchemas from '../validationSchemas/validationSchemas.js';
 
 const authRouter = Router();
 
-authRouter.post('/register');
+authRouter.post(
+    '/register',
+    schemaValidator(validationSchemas.auth.register),
+    controllers.auth.register
+);
 
-authRouter.post('/register-confirm');
+authRouter.post(
+    '/register-confirm',
+    controllers.auth.registerConfirm
+);
 
 authRouter.post('/login');
 
