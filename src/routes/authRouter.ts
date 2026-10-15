@@ -13,10 +13,13 @@ authRouter.post(
 
 authRouter.post(
     '/register-confirm',
+    schemaValidator(validationSchemas.auth.registerConfirm),
     controllers.auth.registerConfirm
 );
 
-authRouter.post('/login');
+authRouter.post(
+    '/login'
+);
 
 authRouter.post('/forgot-password');
 

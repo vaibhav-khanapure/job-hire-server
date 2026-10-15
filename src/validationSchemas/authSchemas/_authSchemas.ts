@@ -1,7 +1,9 @@
-import register from "./register.js";
+import registerConfirmSchema from "./registerConfirmSchema.js";
+import registerSchema from "./registerSchema.js";
 
 const authSchemas = {
-    register
+    register: registerSchema,
+    registerConfirm: registerConfirmSchema
 };
 
 export default authSchemas;
