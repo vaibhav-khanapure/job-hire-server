@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS company_social_medias (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    company_id INTEGER NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+
+    logo_url TEXT,
+    name VARCHAR(500) NOT NULL,
+    url TEXT NOT NULL,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
