@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS company_benefits (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
-    company_id INTEGER NOT NULL REFERENCES companies(id)ON DELETE CASCADE,
+    company_id INTEGER NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
 
     title VARCHAR(300) NOT NULL,
     description TEXT,
