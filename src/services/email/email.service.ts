@@ -1,6 +1,6 @@
 import type SMTPTransport from 'nodemailer/lib/smtp-transport/index.js';
 import nodemailer from 'nodemailer';
-import ENV from '../constants/ENV.js';
+import ENV from '../../constants/ENV.js';
 
 const options: SMTPTransport.Options = {
     host: ENV.EMAIL_HOST,
