@@ -5,6 +5,12 @@ const envSchema = z.object({
 
     CLIENT_URL: z.url(),
 
+    EMAIL_HOST: z.string(),
+    EMAIL_PORT: z.coerce.number(),
+    EMAIL_USER: z.string(),
+    EMAIL_PASS: z.string(),
+    EMAIL_TLS: z.stringbool(),
+
     JWT_ACCESS_SECRET: z.string().min(20),
     JWT_REFRESH_SECRET: z.string().min(20),
 
