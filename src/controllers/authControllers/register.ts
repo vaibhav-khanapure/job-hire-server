@@ -21,7 +21,9 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
         const { name, email, company, password } = req.body;
 
         const { rows: [userExists] } = await pg.pool.query(
-            `SELECT 1 FROM employers WHERE email = $1`,
+            `SELECT 1 FROM employers 
+             WHERE email = $1 
+             LIMIT 1`,
             [email]
         );
 
@@ -31,7 +33,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 
         const hash = await bcrypt.hash(password, 10);
 
-        const userKey = `auth:register:${email}`;
+        const userKey = `employer:auth:register:${email}`;
         const userAttemptsKey = `${userKey}:attempts`;
 
         const code = generateRandomCode();
@@ -39,7 +41,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
         const acknowledged = await redis.eval(REDIS_REGISTER_SCRIPT, {
             keys: [userKey, userAttemptsKey],
             arguments: [
-                JSON.stringify({ name, email, company, hash, code }),
+                JSON.stringify({ name, company, hash, code }),
                 '0'
             ]
         });

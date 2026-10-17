@@ -23,7 +23,7 @@ const registerConfirm = async (req: Request, res: Response, next: NextFunction) 
 
     const { email, code } = req.body;
 
-    const userKey = `auth:register:${email}`;
+    const userKey = `employer:auth:register:${email}`;
     const userAttemptsKey = `${userKey}:attempts`;
 
     try {
@@ -32,11 +32,7 @@ const registerConfirm = async (req: Request, res: Response, next: NextFunction) 
             redis.get(userAttemptsKey)
         ]);
 
-        if (!userRedisData) {
-            return res.status(404).json({ message: 'Registration session expired' });
-        };
-
-        if (!userAttempts) {
+        if (!userRedisData || !userAttempts) {
             return res.status(404).json({ message: 'Registration session expired' });
         };
 
@@ -69,7 +65,7 @@ const registerConfirm = async (req: Request, res: Response, next: NextFunction) 
 
         const { rows: [user] } = await poolClient.query(
             `INSERT INTO employers (name, email, password_hash) VALUES ($1, $2, $3) returning id`,
-            [userData?.name, userData?.email, userData?.hash]
+            [userData?.name, email, userData?.hash]
         );
 
         const { rows: [company] } = await poolClient.query(
@@ -110,7 +106,19 @@ const registerConfirm = async (req: Request, res: Response, next: NextFunction) 
         try {
             await redis.del([userKey, userAttemptsKey]);
         } catch (error) {
-            console.error(`REDIS ERROR: Register confirm delete key failed for ${email} - Reason:`, error);
+            console.error(`REDIS ERROR: Register confirm delete failed for ${email} - Reason:`, error);
+        };
+
+        try {
+            await redis.set(`employer:${email}`, JSON.stringify({
+                id: user?.id,
+                n: userData.name,
+                p: userData?.hash,
+                cid: company?.id,
+                r: 'admin',
+            }));
+        } catch (error) {
+            console.error(`REDIS ERROR: User store at register confirm failed for ${email} - Reason:`, error);
         };
 
         return res.status(201).json({
