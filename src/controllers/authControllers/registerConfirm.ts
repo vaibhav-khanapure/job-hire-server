@@ -2,10 +2,10 @@ import type { NextFunction, Request, Response } from 'express';
 import type { PoolClient } from 'pg';
 import { createHash } from 'node:crypto';
 import redis from '../../config/redis.js';
-import pg from '../../config/pg/pg.js';
 import generateCompanySlug from '../../utils/generators/generateCompanySlug.js';
 import getDeviceName from '../../utils/detectors/getDeviceName.js';
 import { generateAccessToken, generateRefreshToken } from '../../utils/generators/token/auth.js';
+import pg from '../../config/pg.js';
 
 interface UserData {
     name: string;
@@ -59,7 +59,7 @@ const registerConfirm = async (req: Request, res: Response, next: NextFunction) 
             });
         };
 
-        poolClient = await pg.pool.connect();
+        poolClient = await pg.connect();
 
         await poolClient.query('BEGIN');
 
@@ -110,13 +110,13 @@ const registerConfirm = async (req: Request, res: Response, next: NextFunction) 
         };
 
         try {
-            await redis.set(`employer:${email}`, JSON.stringify({
-                id: user?.id,
+            await redis.hSet(`employer:${email}`, {
+                id: String(user.id),
+                cid: String(user.cid),
                 n: userData.name,
                 p: userData?.hash,
-                cid: company?.id,
                 r: 'admin',
-            }));
+            });
         } catch (error) {
             console.error(`REDIS ERROR: User store at register confirm failed for ${email} - Reason:`, error);
         };

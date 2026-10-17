@@ -2,9 +2,9 @@ import type { NextFunction, Request, Response } from 'express';
 import redis from '../../config/redis.js';
 import { generateAccessToken, generateRefreshToken } from '../../utils/generators/token/auth.js';
 import { createHash } from 'node:crypto';
-import pg from '../../config/pg/pg.js';
 import bcrypt from 'bcrypt';
 import getDeviceName from '../../utils/detectors/getDeviceName.js';
+import pg from '../../config/pg.js';
 
 interface User {
     id: number;
@@ -27,15 +27,15 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         const userKey = `employer:${email}`;
         let user: User | null = null;
 
-        const cachedUser = await redis.get(userKey);
+        const cachedUser = await redis.hGetAll(userKey);
 
-        if (!cachedUser) {
-            const { rows: [userData] } = await pg.pool.query(
-                `SELECT u.id, u.name, u.password_hash, cr.role, cr.company_id
-                 FROM users u
+        if (!cachedUser || !cachedUser['id'] || !cachedUser['p']) {
+            const { rows: [userData] } = await pg.query(
+                `SELECT e.id, e.name, e.password_hash, cr.role, cr.company_id
+                 FROM employers e
                  INNER JOIN company_roles cr
-                 ON u.id = cr.employer_id
-                 WHERE u.email = $1
+                 ON e.id = cr.employer_id
+                 WHERE e.email = $1
                  LIMIT 1
                 `,
                 [email]
@@ -46,16 +46,28 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
             };
 
             user = {
-                id: userData.id,
-                n: userData.name,
-                p: userData.password_hash,
-                r: userData.role,
-                cid: userData.company_id,
+                id: userData?.id,
+                n: userData?.name,
+                p: userData?.password_hash,
+                r: userData?.role,
+                cid: userData?.company_id,
             };
 
-            await redis.set(userKey, JSON.stringify(user));
+            await redis.hSet(userKey, {
+                id: String(user.id),
+                cid: String(user.cid),
+                n: user.n,
+                p: user.p,
+                r: user.r,
+            });
         } else {
-            user = JSON.parse(cachedUser) as User;
+            user = {
+                id: Number(cachedUser['id']),
+                n: cachedUser['n'] ?? '',
+                p: cachedUser['p'] ?? '',
+                r: cachedUser['r'] as User['r'],
+                cid: Number(cachedUser['cid']),
+            };
         };
 
         const isPasswordCorrect = await bcrypt.compare(password, user?.p);
@@ -78,7 +90,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
             .update(refreshToken)
             .digest('hex');
 
-        await pg.pool.query(
+        await pg.query(
             `INSERT INTO user_sessions 
              (user_id, refresh_token_hash, device_name, ip_address, user_agent, expires_at) 
              VALUES

@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
-import pg from '../../config/pg/pg.js';
 import bcrypt from 'bcrypt';
 import redis from '../../config/redis.js';
 import generateRandomCode from '../../utils/generators/generateRandomCode.js';
+import pg from '../../config/pg.js';
 
 const REDIS_REGISTER_SCRIPT = `
     if redis.call('EXISTS', KEYS[1]) == 1
@@ -20,7 +20,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { name, email, company, password } = req.body;
 
-        const { rows: [userExists] } = await pg.pool.query(
+        const { rows: [userExists] } = await pg.query(
             `SELECT 1 FROM employers 
              WHERE email = $1 
              LIMIT 1`,
